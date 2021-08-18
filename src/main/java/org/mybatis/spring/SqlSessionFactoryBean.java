@@ -506,6 +506,9 @@ public class SqlSessionFactoryBean
 
     final Configuration targetConfiguration;
 
+    /**
+     * 通过构建的 参数 ,给 targetConfiguration 赋值.
+     */
     XMLConfigBuilder xmlConfigBuilder = null;
     if (this.configuration != null) {
       targetConfiguration = this.configuration;
@@ -620,7 +623,7 @@ public class SqlSessionFactoryBean
     } else {
       LOGGER.debug(() -> "Property 'mapperLocations' was not specified.");
     }
-
+    //  创建 DefaultSqlSessionFactory
     return this.sqlSessionFactoryBuilder.build(targetConfiguration);
   }
 

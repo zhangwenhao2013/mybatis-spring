@@ -372,6 +372,7 @@ public class MapperScannerConfigurer
       scanner.setDefaultScope(defaultScope);
     }
     scanner.registerFilters();
+    // 扫描 并完成 BeanDefinition 的注册
     scanner.scan(
         StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
   }

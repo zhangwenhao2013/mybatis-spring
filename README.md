@@ -22,3 +22,58 @@ Essentials
 
 * [See the published docs](http://mybatis.github.io/spring/)
 * [See the snapshot docs](src/site/markdown) (Note: may contain explanation of unreleased features)
+
+
+怎么使用
+------
+
+
+```
+
+1: 配置
+@Configuration
+
+@Bean
+ @Bean(name = "basicSqlSessionFactory")
+    public SqlSessionFactoryBean MySqlSessionFactoryBean(
+            @Qualifier("basicDataSource") DataSource dataSource) {
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        // 如果这里设置了Mapper文件的路径 就可以不使用 @MapperScan @MapperScans
+        return factoryBean;
+    }
+
+@Bean(name = "basicDataSource")
+    public DataSource basicDataSource() {
+        //return DruidDataSourceFactory.createDataSource(dsMap);
+        DataSource datasource = new DataSource();
+        return datasource;
+    }
+
+2:配置@Configuration  @MapperScan/@MapperScans,配置Mapper文件包路径
+
+@MapperScan/@MapperScans的作用是将路径下的Mapper文件添加到Spring 容器,以及SqlSessionFactory.
+
+
+```
+
+
+@MapperScan/@MapperScans 扫描原理
+------------------------------
+
+@Import(MapperScannerRegistrar.class)
+
+MapperScannerRegistrar 实现了 ImportBeanDefinitionRegistrar 接口
+
+
+核心流程
+------------------------------
+
+
+
+
+
+
+
+
+
+
