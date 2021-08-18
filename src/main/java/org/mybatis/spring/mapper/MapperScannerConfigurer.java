@@ -373,6 +373,7 @@ public class MapperScannerConfigurer
     }
     scanner.registerFilters();
     // 扫描 并完成 BeanDefinition 的注册
+    // Mapper.class 是接口, 将其定义为BeanDefinition的时候,将其定义为 ScopedProxyFactoryBean 类型.
     scanner.scan(
         StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
   }
