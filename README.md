@@ -56,6 +56,26 @@ Essentials
 ```
 
 
+如果不使用 @MapperScan/@MapperScans, 就需要手动注入 MapperScannerConfigurer.
+
+```
+   @Bean(name = "basicSqlSessionTemplate")
+    public SqlSessionTemplate testSqlSessionTemplate(
+            @Qualifier("basicSqlSessionFactory") SqlSessionFactory sqlSessionFactory)
+            throws Exception {
+        return new SqlSessionTemplate(sqlSessionFactory);
+    }
+
+    @Bean(name = "basicMapperScanner")
+    public MapperScannerConfigurer mapperScannerConfigurer() {
+        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+        mapperScannerConfigurer.setSqlSessionTemplateBeanName("basicSqlSessionTemplate");
+        mapperScannerConfigurer.setBasePackage("com.**.mapper.omms");
+        return mapperScannerConfigurer;
+    }
+```
+
+
 @MapperScan/@MapperScans 扫描原理
 ------------------------------
 
