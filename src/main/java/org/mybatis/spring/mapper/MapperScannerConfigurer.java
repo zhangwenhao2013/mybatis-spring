@@ -354,6 +354,16 @@ public class MapperScannerConfigurer
       processPropertyPlaceHolders();
     }
 
+    /**
+     * ClassPathMapperScanner
+     *
+     * 在执行 scan() 方法时,会调用父类的Spring 的 doscan() 方法, Spring 的 扫描方法默认是跳过 抽象方法 和 接口类的.
+     * 如果想扫描到 mybatis 的 Mapper 接口 就需要 在ClassPathMapperScanner 中 重写isCandidateComponent方法
+     *
+     * org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider#findCandidateComponents(java.lang.String)
+     *                                                           |
+     * org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider#isCandidateComponent(org.springframework.beans.factory.annotation.AnnotatedBeanDefinition)
+     */
     ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
     scanner.setAddToConfig(this.addToConfig);
     scanner.setAnnotationClass(this.annotationClass);
@@ -373,7 +383,7 @@ public class MapperScannerConfigurer
     }
     scanner.registerFilters();
     // 扫描 并完成 BeanDefinition 的注册
-    // Mapper.class 是接口, 将其定义为BeanDefinition的时候,将其定义为 ScopedProxyFactoryBean 类型.
+    // Mapper.class 是接口, 将其定义为BeanDefinition的时候,将其定义为 MapperFactoryBean 类型.
     scanner.scan(
         StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
   }

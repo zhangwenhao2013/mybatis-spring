@@ -78,7 +78,9 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
 
   void registerBeanDefinitions(AnnotationMetadata annoMeta, AnnotationAttributes annoAttrs,
       BeanDefinitionRegistry registry, String beanName) {
-    //
+    /**
+     *  构建一个 获取 MapperScannerConfigurer 的 BeanDefinitionBuilder
+     */
     BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
     builder.addPropertyValue("processPropertyPlaceHolders", true);
 
@@ -137,7 +139,7 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
     }
 
     builder.addPropertyValue("basePackage", StringUtils.collectionToCommaDelimitedString(basePackages));
-
+    //注册 MapperScannerConfigurer 的 BeanDefinition
     registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
 
   }

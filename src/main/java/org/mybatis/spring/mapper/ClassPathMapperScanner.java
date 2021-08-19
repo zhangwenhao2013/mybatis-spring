@@ -232,9 +232,18 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
       // the mapper interface is the original class of the bean
       // but, the actual class of the bean is MapperFactoryBean
+      // 通过 MapperFactoryBean(Class<T> mapperInterface) 创建
       definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); // issue #59
+      /**
+       *
+       * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       * 将 mapper 接口 的 BeanDefinition 定义为 MapperFactoryBean
+       * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       *
+       */
       definition.setBeanClass(this.mapperFactoryBeanClass);
 
+      // 定义 addToConfig 的属性
       definition.getPropertyValues().add("addToConfig", this.addToConfig);
 
       // Attribute for MockitoPostProcessor
@@ -256,6 +265,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
           LOGGER.warn(
               () -> "Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored.");
         }
+        //  定义 sqlSessionTemplate
         definition.getPropertyValues().add("sqlSessionTemplate",
             new RuntimeBeanReference(this.sqlSessionTemplateBeanName));
         explicitFactoryUsed = true;
@@ -264,10 +274,11 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
           LOGGER.warn(
               () -> "Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored.");
         }
+        //  定义 sqlSessionTemplate
         definition.getPropertyValues().add("sqlSessionTemplate", this.sqlSessionTemplate);
         explicitFactoryUsed = true;
       }
-
+      // 定义 MapperFactoryBean 注入方式,根据类型注入
       if (!explicitFactoryUsed) {
         LOGGER.debug(() -> "Enabling autowire by type for MapperFactoryBean with name '" + holder.getBeanName() + "'.");
         definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
@@ -283,11 +294,13 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         definition.setScope(defaultScope);
       }
 
+      // MapperFactoryBean 是手动定义进去的 不是 单例的
       if (!definition.isSingleton()) {
         BeanDefinitionHolder proxyHolder = ScopedProxyUtils.createScopedProxy(holder, registry, true);
         if (registry.containsBeanDefinition(proxyHolder.getBeanName())) {
           registry.removeBeanDefinition(proxyHolder.getBeanName());
         }
+        // 注册 BeanDefinition  交给 Spring 负责 创建
         registry.registerBeanDefinition(proxyHolder.getBeanName(), proxyHolder.getBeanDefinition());
       }
 
@@ -296,6 +309,9 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
   /**
    * {@inheritDoc}
+   *
+   * 重写父类 ClassPathBeanDefinitionScanner 的方法
+   *
    */
   @Override
   protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
@@ -304,6 +320,8 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
   /**
    * {@inheritDoc}
+   *
+   * 重写父类 ClassPathBeanDefinitionScanner 的方法
    */
   @Override
   protected boolean checkCandidate(String beanName, BeanDefinition beanDefinition) {

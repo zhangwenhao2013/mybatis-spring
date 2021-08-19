@@ -38,7 +38,6 @@ Essentials
     public SqlSessionFactoryBean MySqlSessionFactoryBean(
             @Qualifier("basicDataSource") DataSource dataSource) {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        // 如果这里设置了Mapper文件的路径 就可以不使用 @MapperScan @MapperScans
         return factoryBean;
     }
 
