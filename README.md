@@ -58,6 +58,8 @@ Essentials
 
 如果不使用 @MapperScan/@MapperScans, 就需要手动注入 MapperScannerConfigurer.
 
+MapperScannerConfigurer 实现了 BeanDefinitionRegistryPostProcessor 接口, Spring 会主动 调用postProcessBeanDefinitionRegistry方法完成 scan.
+
 ```
    @Bean(name = "basicSqlSessionTemplate")
     public SqlSessionTemplate testSqlSessionTemplate(
